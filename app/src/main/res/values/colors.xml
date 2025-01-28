@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="inconnu">#2C2A2A</color>
+    <color name="msg_recu">#E3E3E3</color>
+    <color name="msg_sent">#EEFDDC</color>
+    <color name="heure">#54544F</color>
 </resources>

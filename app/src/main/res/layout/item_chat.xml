@@ -1,0 +1,35 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/participantName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nom du participant"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:ellipsize="end"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/dernierMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dernier message"
+        android:textSize="14sp"
+        android:textColor="@color/inconnu"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="10:45 AM"
+        android:textSize="12sp"
+        android:textColor="@color/inconnu" />
+</LinearLayout>

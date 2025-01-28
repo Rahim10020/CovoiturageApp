@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import tg.eplcoursandroid.covoiturage.models.Conducteur
 import tg.eplcoursandroid.covoiturage.models.Passager
 import tg.eplcoursandroid.covoiturage.models.Utilisateur
@@ -25,18 +23,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+//        authService.deconnecter()
 
         // methode pour inscrire un salaud
-//        authService.inscrire("rahim@gmail.com", "rahimForLife") { success, message ->
+//        authService.inscrire("crepin@gmail.com", "fuckEPLforLife") { success, message ->
 //            if (success) {
-//                Log.d("Inscrire", "rahim inscrit")
+//                Log.d("Inscrire", "crepin inscrit")
 //            } else {
-//                Log.d("Inscrire", "rahim non inscrit")
+//                Log.d("Inscrire", "crepin non inscrit")
 //            }
 //        }
 
@@ -65,8 +60,8 @@ class MainActivity : AppCompatActivity() {
                 Log.e("MainActivity", "Erreur lors de l'ajout de l'utilisateur : ${exception.message}")
             })
 
-        // creation d'un passager
-//        val passager = Passager(utilisateur, "koffiKouma")
+//        // creation d'un passager
+//        val passager = Passager(utilisateur, "crepin")
 //        passagerService.ajouterPassager(passager,onSuccess = {
 //            Log.d("MainActivity", "Passager ajouté avec succès !")
 //        },
@@ -75,8 +70,8 @@ class MainActivity : AppCompatActivity() {
 //            })
 
         // creation d'un conducteur
-        val conducteur = Conducteur(utilisateur, "RahimBro", "Toyota")
-        conducteurService.ajouterConducteur(conducteur)
+//        val conducteur = Conducteur(utilisateur, "RahimBro", "Toyota")
+//        conducteurService.ajouterConducteur(conducteur)
 
     }
 }

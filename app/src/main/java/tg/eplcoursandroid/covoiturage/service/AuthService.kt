@@ -1,5 +1,6 @@
 package tg.eplcoursandroid.covoiturage.service
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -12,15 +13,16 @@ class AuthService {
         mAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Inscription réussie
                     onComplete(true, "Inscription réussie!")
                 } else {
-                    // Erreur lors de l'inscription
+                    // Log l'erreur pour mieux comprendre ce qui se passe
                     val errorMessage = task.exception?.message ?: "Erreur inconnue"
+                    Log.e("AuthService", "Erreur lors de l'inscription: $errorMessage")
                     onComplete(false, errorMessage)
                 }
             }
     }
+
 
     // Connexion d'un utilisateur
     fun connecter(email: String, password: String, onComplete: (Boolean, String?) -> Unit) {

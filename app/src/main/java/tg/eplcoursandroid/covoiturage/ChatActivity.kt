@@ -1,48 +1,78 @@
 package tg.eplcoursandroid.covoiturage
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
-import com.google.firebase.database.ServerValue
-import com.google.firebase.database.database
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import tg.eplcoursandroid.covoiturage.adapter.MessageAdapter
+import tg.eplcoursandroid.covoiturage.models.Message
 
 class ChatActivity : AppCompatActivity() {
-
-    val database = Firebase.database.reference
-
+    private lateinit var chatId: String
+    private lateinit var messagesRecyclerView: RecyclerView
+    private lateinit var messageInput: EditText
+    private lateinit var sendButton: Button
+    private val messages = mutableListOf<Message>()
+    private lateinit var messageAdapter: MessageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-//        setContentView(R.layout.activity_chat)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
+        setContentView(R.layout.activity_chat)
 
-        // enregistrer le message dans la base de donnees quand l'utilisateur clique sur le bouton
-        val messageInput = findViewById<EditText>(R.id.messageInput)
-        val sendButton = findViewById<ImageButton>(R.id.sendButton)
+        // Définir un chatId fixe pour la simulation
+        chatId = "simulatedChatId123"  // Remplace par un ID de test
 
-//        sendButton.setOnClickListener {
-//            val messageText = messageInput.text.toString()
-//            if (messageText.isNotEmpty()) {
-//                val message = hashMapOf(
-//                    "text" to messageText,
-//                    "sender" to Firebase.auth.currentUser?.uid,
-//                    "timestamp" to ServerValue.TIMESTAMP
-//                )
-//                database.child("chats").child(chatId).child("messages").push().setValue(message)
-//                messageInput.text.clear()
-//            }
-//        }
+        messagesRecyclerView = findViewById(R.id.messagesRecyclerView)
+        messageInput = findViewById(R.id.messageInput)
+        sendButton = findViewById(R.id.sendButton)
 
+        messagesRecyclerView.layoutManager = LinearLayoutManager(this)
+        messageAdapter = MessageAdapter(messages, FirebaseAuth.getInstance().currentUser?.uid ?: "")
+        messagesRecyclerView.adapter = messageAdapter
+
+        // Récupérer les messages
+        FirebaseDatabase.getInstance().reference.child("messages").child(chatId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    messages.clear()
+                    snapshot.children.forEach { data ->
+                        val message = data.getValue(Message::class.java)
+                        if (message != null) messages.add(message)
+                    }
+                    messageAdapter.notifyDataSetChanged()
+                    messagesRecyclerView.scrollToPosition(messages.size - 1)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@ChatActivity, "Erreur : ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+
+        // Envoyer un message
+        sendButton.setOnClickListener {
+            Log.d("Bouton", "Envoyer cliquer")
+            val text = messageInput.text.toString()
+            if (text.isNotBlank()) {
+                val messageId = FirebaseDatabase.getInstance().reference.push().key ?: return@setOnClickListener
+                val message = Message(
+                    id = messageId,
+                    senderId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+                    text = text,
+                    timestamp = System.currentTimeMillis()
+                )
+
+                FirebaseDatabase.getInstance().reference.child("messages").child(chatId).child(messageId).setValue(message)
+                messageInput.text.clear()
+            }
+        }
     }
 }
