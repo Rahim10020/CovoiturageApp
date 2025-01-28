@@ -2,7 +2,6 @@ package tg.eplcoursandroid.covoiturage
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -33,13 +32,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         // methode pour inscrire un salaud
-        authService.inscrire("rahim@gmail.com", "rahimForLife") { success, message ->
-            if (success) {
-                Log.d("Inscrire", "rahim inscrit")
-            } else {
-                Log.d("Inscrire", "rahim non inscrit")
-            }
-        }
+//        authService.inscrire("rahim@gmail.com", "rahimForLife") { success, message ->
+//            if (success) {
+//                Log.d("Inscrire", "rahim inscrit")
+//            } else {
+//                Log.d("Inscrire", "rahim non inscrit")
+//            }
+//        }
 
         authService.connecter("rahim@gmail.com", "rahimForLife") { success, message ->
             if (success) {
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("ChatApp", "Aucun utilisateur connecté.")
         }
 
-        // creation d'un utilisateur
+        // creation d'un utilisateur qui est celui actuellement connecte
         val utilisateur = Utilisateur(currentUser!!.uid, currentUser.email, currentUser.displayName)
         utilisateurService.ajouterUtilisateur(utilisateur,onSuccess = {
             Log.d("MainActivity", "Utilisateur ajouté avec succès !")
